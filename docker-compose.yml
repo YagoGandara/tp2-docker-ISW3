@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: tp2-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: appdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app-qa:
+    image: ${DOCKERHUB_USER}/tp2-docker:${APP_TAG:-dev}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "QA"
+      CONNECTION_STRING: "Server=mysql;Port=3306;Database=appdb_qa;User ID=appuser;Password=apppass;"
+      LOG_LEVEL: "Information"
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+
+  app-prod:
+    image: ${DOCKERHUB_USER}/tp2-docker:${APP_TAG:-dev}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      CONNECTION_STRING: "Server=mysql;Port=3306;Database=appdb_prod;User ID=appuser;Password=apppass;"
+      LOG_LEVEL: "Warning"
+    ports:
+      - "8082:8080"
+    restart: unless-stopped
+
+volumes:
+  mysqldata:
