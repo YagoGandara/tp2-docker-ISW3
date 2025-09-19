@@ -89,7 +89,7 @@ Semilla y lectura de PROD
 Aislamiento QA/PROD
 Para esto insertaremos algo en QA y controlaremos que no aparezca en PROD; a modo de ejemplo:
 ```bash
-    curl.exe -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d "{\"title\":\"qa-only\"}"
+    curl.exe -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d '{\"title\":\"qa-only\"}'
     curl http://localhost:8081/todos
     curl http://localhost:8082/todos
 ```
@@ -97,7 +97,7 @@ Para esto insertaremos algo en QA y controlaremos que no aparezca en PROD; a mod
 Persistencia
 ```bash
     # agregar un registro
-    curl.exe -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d '{"title":"persisto"}'
+    curl.exe -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d '{\"title\":\"persisto\"}'
 
     # reiniciar servicios
     docker compose restart
