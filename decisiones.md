@@ -1,8 +1,3 @@
----
-
-## `decisiones.md`
-
-```md
 # decisiones.md
 
 ## Elección de la aplicación y tecnología utilizada
@@ -72,7 +67,7 @@ Se eligió esta estructura ya que las diferencias se **centralizan** en variable
 ---
 
 ## Estrategia de persistencia de datos
-çSe definió el volumen `mysqldata` montado en `/var/lib/mysql` del contenedor MySQL:
+Se definió el volumen `mysqldata` montado en `/var/lib/mysql` del contenedor MySQL:
 - Los datos **persisten** entre reinicios de contenedor
 - Simple reinicialización del entorno: `docker compose down -v`
 
