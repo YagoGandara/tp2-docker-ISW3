@@ -16,26 +16,26 @@ Levantar una app web minima, contenerizada, con MySQL (por elección propia) y d
 ```bash
 # en la raiz del proyecto
 docker build -t yagogandara/tp2-docker:dev .
-docker tag yagogandara/tp2-docker:dev tagogandara/tp2-docker:v1.0
+docker tag yagogandara/tp2-docker:dev yagogandara/tp2-docker:v1.0
 
 docker login
 docker push yagogandara/tp2-docker:dev
-docker push yagogandara/tp2-docker_v1.0
+docker push yagogandara/tp2-docker:v1.0
 ```
 
 docker-compose.yml levanta los 3 servicios (mysql, app-qa y app-prod, ambas usando la misma imagen, pero con variables de entorno distintas)
 
 1) Creamos el .env
-    DOCKERHUB_USER=yagogandara
-    APP_TAG=v1.0   # o 'dev' si querés la versión de desarrollo
+    - DOCKERHUB_USER=yagogandara
+    - APP_TAG=v1.0   # o 'dev' si querés la versión de desarrollo
 
 2) Levantar
-    docker compose up -d
-    docker compose ps
+    - docker compose up -d
+ - docker compose ps
 
 3) Apagar
-    docker compose down #si queremos mantener los datos
-    docker compose down -v #si queremos borrar el volumen
+    - docker compose down #si queremos mantener los datos
+    - docker compose down -v #si queremos borrar el volumen
 
 ----------------------------------------------------------------------------------------------------------------------
 ## Acceso a la publicación (URL'S, puertos)
@@ -76,20 +76,20 @@ Salud de los Servicios
 ```
 Semilla y lectura de QA
 ```bash
-    curl -X POST http://localhost:8081/seed
+    curl.exe -X POST http://localhost:8081/seed
     curl http://localhost:8081/todos
 ```
 
 Semilla y lectura de PROD
 ```bash
-    curl -X POST http://localhost:8082/seed
+    curl.exe -X POST http://localhost:8082/seed
     curl http://localhost:8082/todos
 ```
 
 Aislamiento QA/PROD
 Para esto insertaremos algo en QA y controlaremos que no aparezca en PROD; a modo de ejemplo:
 ```bash
-    curl -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d "{\"title\":\"qa-only\"}"
+    curl.exe -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d "{\"title\":\"qa-only\"}"
     curl http://localhost:8081/todos
     curl http://localhost:8082/todos
 ```
@@ -97,7 +97,7 @@ Para esto insertaremos algo en QA y controlaremos que no aparezca en PROD; a mod
 Persistencia
 ```bash
     # agregar un registro
-    curl -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d "{\"title\":\"persisto\"}"
+    curl.exe -X POST http://localhost:8081/todos -H "Content-Type: application/json" -d '{"title":"persisto"}'
 
     # reiniciar servicios
     docker compose restart
